@@ -1,0 +1,18 @@
+resources:
+
+################################################################################
+# Kubernetes cluster
+################################################################################
+
+  - name: {{ env['name'] }}-cluster
+    type: container.v1.cluster
+    properties:
+      zone: {{ properties['zone'] }}
+      cluster:
+        name: {{ env['name'] }}-cluster
+        initialClusterVersion: {{ properties['initialClusterVersion'] }}
+        locations: {{ properties['locations'] }}
+        nodePools:
+        {% for pool in properties['nodePools'] -%}
+        - {{ pool }}
+        {% endfor %}

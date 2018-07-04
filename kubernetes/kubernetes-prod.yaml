@@ -1,0 +1,66 @@
+imports:
+- path: kubernetes.jinja
+
+resources:
+  - name: my-cluster-prod
+    type: kubernetes.jinja
+    properties:
+      initialClusterVersion: "1.9.7-gke.3"
+      zone: europe-west1-b
+      locations:
+      - europe-west1-b
+      - europe-west1-c
+      nodePools:
+        - name: default-pool
+          initialNodeCount: 2
+          version: "1.9.7-gke.3"
+          config:
+            machineType: "custom-1-6656"
+            oauthScopes:
+            - https://www.googleapis.com/auth/logging.write
+            - https://www.googleapis.com/auth/devstorage.read_write
+            - https://www.googleapis.com/auth/monitoring
+            - https://www.googleapis.com/auth/service.management.readonly
+            - https://www.googleapis.com/auth/servicecontrol
+            - https://www.googleapis.com/auth/trace.append
+          autoscaling:
+            enabled: True
+            minNodeCount: 2
+            maxNodeCount: 4
+          management:
+            autoUpgrade: False
+            autoRepair: True
+        - name: webserver-pool
+          initialNodeCount: 4
+          version: "1.9.7-gke.3"
+          config:
+            machineType: "n1-standard-1"
+            localSsdCount: 1
+            oauthScopes:
+            - https://www.googleapis.com/auth/logging.write
+            - https://www.googleapis.com/auth/devstorage.read_write
+            - https://www.googleapis.com/auth/monitoring
+            - https://www.googleapis.com/auth/service.management.readonly
+            - https://www.googleapis.com/auth/servicecontrol
+            - https://www.googleapis.com/auth/trace.append
+          autoscaling:
+            enabled: True
+            minNodeCount: 4
+            maxNodeCount: 8 
+        - name: preemptible-pool
+          initialNodeCount: 1
+          version: "1.9.7-gke.3"
+          config:
+            machineType: "n1-highcpu-4"
+            preemptible: True
+            oauthScopes:
+            - https://www.googleapis.com/auth/logging.write
+            - https://www.googleapis.com/auth/devstorage.read_write
+            - https://www.googleapis.com/auth/monitoring
+            - https://www.googleapis.com/auth/service.management.readonly
+            - https://www.googleapis.com/auth/servicecontrol
+            - https://www.googleapis.com/auth/trace.append
+          autoscaling:
+            enabled: True
+            minNodeCount: 2
+            maxNodeCount: 8             
